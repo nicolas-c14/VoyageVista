@@ -71,6 +71,7 @@ $activities = $stmt->fetchAll();
 <title>
 Choix activités
 </title>
+<link rel="icon" href="assets/images/VoyageVistaLogo.png" type="image/png">
 
 <link
 href="assets/css/bootstrap.min.css"

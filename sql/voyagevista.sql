@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : sam. 30 mai 2026 à 12:15
+-- Généré le : dim. 31 mai 2026 à 09:27
 -- Version du serveur : 5.7.24
 -- Version de PHP : 8.3.1
 
@@ -88,6 +88,20 @@ CREATE TABLE `cart_items` (
   `check_out` date NOT NULL,
   `persons` int(11) NOT NULL,
   `added_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `contacts`
+--
+
+CREATE TABLE `contacts` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -194,7 +208,7 @@ INSERT INTO `transports` (`id`, `destination_id`, `type`, `departure_city`, `arr
 (1, 11, 'Avion', 'Paris', 'Tokyo', '2026-06-10 08:00:00', '2026-06-10 20:00:00', '899.99', 23, 'avion.jpg', '2026-05-30 11:41:46'),
 (2, 10, 'Train', 'Lyon', 'Barcelone', '2026-06-15 09:00:00', '2026-06-15 15:00:00', '120.00', 12, 'train.jpg', '2026-05-30 11:41:46'),
 (3, 8, 'Bus', 'Paris', 'Berlin', '2026-07-01 06:00:00', '2026-07-01 18:00:00', '79.99', 40, 'bus.jpg', '2026-05-30 11:41:46'),
-(4, 12, 'Avion', 'Paris', 'Londres', '2026-07-12 10:00:00', '2026-07-12 11:30:00', '199.99', 18, 'avion.jpg', '2026-05-30 11:41:46'),
+(4, 12, 'Avion', 'Paris', 'Londres', '2026-07-12 10:00:00', '2026-07-12 11:30:00', '199.99', 17, 'avion.jpg', '2026-05-30 11:41:46'),
 (5, 7, 'Avion', 'Marseille', 'Lisbonne', '2026-08-05 07:00:00', '2026-08-05 10:00:00', '249.99', 30, 'avion.jpg', '2026-05-30 11:41:46');
 
 -- --------------------------------------------------------
@@ -250,6 +264,12 @@ ALTER TABLE `activities`
 ALTER TABLE `cart_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Index pour la table `contacts`
+--
+ALTER TABLE `contacts`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `destinations`
@@ -315,7 +335,13 @@ ALTER TABLE `activities`
 -- AUTO_INCREMENT pour la table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `contacts`
+--
+ALTER TABLE `contacts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `destinations`
@@ -327,19 +353,19 @@ ALTER TABLE `destinations`
 -- AUTO_INCREMENT pour la table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `reservation_activities`
 --
 ALTER TABLE `reservation_activities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `transports`

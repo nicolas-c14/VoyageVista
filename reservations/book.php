@@ -248,12 +248,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     class="btn btn-primary">
                 Confirmer réservation
             </button>
-            <button type="submit"
-                    name="action"
-                    value="cart"
-                    class="btn btn-outline-primary">
-                🛒 Ajouter au panier
-            </button>
         </div>
     </form>
 </div>

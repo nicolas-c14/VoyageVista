@@ -189,18 +189,18 @@ $randomDestinations = getRandomDestinations();
         </div>
 
         <!-- CONTACT FORM -->
-        <form id="contactForm" class="row g-4 justify-content-center">
+        <form id="contactForm" class="row g-4 justify-content-center" action="contact_process.php" method="POST">
 
             <div class="col-md-6">
-                <input type="text" id="contactName" class="form-control form-control-lg" placeholder="Votre nom" required>
+                <input type="text" name="name" id="contactName" class="form-control form-control-lg" placeholder="Votre nom" required>
             </div>
 
             <div class="col-md-6">
-                <input type="email" id="contactEmail" class="form-control form-control-lg" placeholder="Votre email" required>
+                <input type="email" name="email" id="contactEmail" class="form-control form-control-lg" placeholder="Votre email" required>
             </div>
 
             <div class="col-12">
-                <textarea class="form-control form-control-lg" rows="5" placeholder="Votre message" required></textarea>
+                <textarea name="message" class="form-control form-control-lg" rows="5" placeholder="Votre message" required></textarea>
             </div>
 
             <div class="col-12 text-center">
