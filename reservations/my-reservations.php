@@ -3,6 +3,7 @@
 session_start();
 
 require_once __DIR__ . "/../models/reservationModel.php";
+require_once __DIR__ . "/../config/database.php";
 
 /* =========================
    LOGIN CHECK
@@ -26,6 +27,33 @@ $reservations =
     );
 
 $hasReservations = !empty($reservations);
+
+/* =========================
+   FILTRES ET TRIS
+========================= */
+$statusFilter = $_GET['status'] ?? '';
+$sort = $_GET['sort'] ?? 'date_desc';
+
+if ($hasReservations) {
+    // Filtrage manuel (si non géré par le model)
+    if ($statusFilter) {
+        $reservations = array_filter($reservations, function($r) use ($statusFilter) {
+            return $r['status'] === $statusFilter;
+        });
+    }
+
+    // Tri manuel
+    usort($reservations, function($a, $b) use ($sort) {
+        switch ($sort) {
+            case 'price_asc': return $a['total_price'] <=> $b['total_price'];
+            case 'price_desc': return $b['total_price'] <=> $a['total_price'];
+            case 'date_asc': return strcmp($a['check_in'], $b['check_in']);
+            default: return strcmp($b['check_in'], $a['check_in']);
+        }
+    });
+    
+    $hasReservations = !empty($reservations);
+}
 
 ?>
 
@@ -61,6 +89,36 @@ $hasReservations = !empty($reservations);
             Mes réservations
 
         </h1>
+
+        <!-- BARRE DE RECHERCHE ET FILTRES -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Filtrer par statut</label>
+                        <select name="status" class="form-select">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : ''; ?>>En attente</option>
+                            <option value="confirmed" <?= $statusFilter === 'confirmed' ? 'selected' : ''; ?>>Confirmée</option>
+                            <option value="completed" <?= $statusFilter === 'completed' ? 'selected' : ''; ?>>Terminée</option>
+                            <option value="cancelled" <?= $statusFilter === 'cancelled' ? 'selected' : ''; ?>>Annulée</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Trier par</label>
+                        <select name="sort" class="form-select">
+                            <option value="date_desc" <?= $sort === 'date_desc' ? 'selected' : ''; ?>>Date (Récent → Ancien)</option>
+                            <option value="date_asc" <?= $sort === 'date_asc' ? 'selected' : ''; ?>>Date (Ancien → Récent)</option>
+                            <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : ''; ?>>Prix (Croissant)</option>
+                            <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : ''; ?>>Prix (Décroissant)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Appliquer les filtres</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="row g-4">
 
@@ -108,6 +166,15 @@ $hasReservations = !empty($reservations);
                     $cartCheckOut = $newCheckOut->format("Y-m-d");
                 }
 
+                /* Récupération des activités pour cette réservation */
+                $stmtActs = $pdo->prepare("
+                    SELECT a.id, a.name, a.price 
+                    FROM activities a 
+                    JOIN reservation_activities ra ON a.id = ra.activity_id 
+                    WHERE ra.reservation_id = ?
+                ");
+                $stmtActs->execute([$reservation["id"]]);
+                $bookedActivities = $stmtActs->fetchAll();
                 ?>
 
                 <div class="col-md-4">
@@ -143,6 +210,13 @@ $hasReservations = !empty($reservations);
                                 →
 
                                 <?= $reservation["arrival_city"]; ?>
+                                
+                                <br>
+                                <a href="cancel-transport.php?reservation_id=<?= $reservation['id']; ?>" 
+                                   class="text-danger small" 
+                                   onclick="return confirm('Annuler ce transport ?')">
+                                   Annuler le transport
+                                </a>
 
                             </p>
 
@@ -181,6 +255,25 @@ $hasReservations = !empty($reservations);
                                 nuit(s) 
 
                             </p>
+
+                            <!-- AFFICHAGE DES ACTIVITÉS -->
+                            <?php if (!empty($bookedActivities)): ?>
+                                <div class="mt-3 p-2 bg-light rounded">
+                                    <p class="small mb-1 fw-bold">🎡 Activités :</p>
+                                    <ul class="list-unstyled mb-0">
+                                        <?php foreach($bookedActivities as $act): ?>
+                                            <li class="small d-flex justify-content-between align-items-center mb-1">
+                                                <?= $act['name']; ?> (<?= $act['price']; ?>€)
+                                                <a href="cancel-activity.php?reservation_id=<?= $reservation['id']; ?>&activity_id=<?= $act['id']; ?>" 
+                                                   class="text-danger ms-2"
+                                                   title="Retirer l'activité">
+                                                   &times;
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
 
                             <p class="fw-bold text-primary">
 

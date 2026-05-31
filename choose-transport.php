@@ -60,6 +60,7 @@ $transports = $stmt->fetchAll();
 
 <meta charset="UTF-8">
 <title>Choix transport</title>
+<link rel="icon" href="assets/images/VoyageVistaLogo.png" type="image/png">
 
 <link
 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"

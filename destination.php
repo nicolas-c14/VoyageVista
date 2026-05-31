@@ -41,6 +41,16 @@ $accommodations =
         $destination["id"]
     );
 
+/* =========================
+   SORT ACCOMMODATIONS
+========================= */
+$sortPrice = $_GET['sort'] ?? '';
+if ($sortPrice === 'asc') {
+    usort($accommodations, fn($a, $b) => $a['price_per_night'] <=> $b['price_per_night']);
+} elseif ($sortPrice === 'desc') {
+    usort($accommodations, fn($a, $b) => $b['price_per_night'] <=> $a['price_per_night']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -132,11 +142,18 @@ $accommodations =
         </div>
 
         <!-- ACCOMMODATIONS -->
-        <h2 class="mt-5 mb-4">
-
-            Hébergements disponibles
-
-        </h2>
+        <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+            <h2 class="mb-0">Hébergements disponibles</h2>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Trier par prix
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-menu-item p-2 d-block text-decoration-none" href="?id=<?= $id; ?>&sort=asc">Prix croissant</a></li>
+                    <li><a class="dropdown-menu-item p-2 d-block text-decoration-none" href="?id=<?= $id; ?>&sort=desc">Prix décroissant</a></li>
+                </ul>
+            </div>
+        </div>
 
         <div class="row g-4">
 

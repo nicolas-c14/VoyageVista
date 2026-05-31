@@ -36,6 +36,7 @@ $destinations = getAllDestinations();
         Admin Dashboard
     </title>
     <link rel="icon" href="assets/images/VoyageVistaLogo.png" type="image/png">
+    <link rel="icon" href="../assets/images/VoyageVistaLogo.png" type="image/png">
 
 
     <link rel="stylesheet"
@@ -69,6 +70,13 @@ $destinations = getAllDestinations();
            class="btn btn-secondary">
 
             Retourner aux destinations
+
+        </a>
+
+        <a href="../admin-users.php"
+           class="btn btn-secondary">
+
+            Gestion des rôles
 
         </a>
 
